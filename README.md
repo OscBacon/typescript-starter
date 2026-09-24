@@ -4,6 +4,20 @@ pnpm monorepo: React + Vite + TanStack Query + shadcn/ui (`apps/web`), Hono (`ap
 
 Requires Node 26 and pnpm 12. Install with `pnpm install`.
 
+## Architecture
+
+- **api** — Hono on Node (runs `.ts` directly), routes defined with `@hono/zod-openapi`, which validates requests, infers types, and generates the OpenAPI spec; Scalar serves the docs.
+- **web** — React SPA built with Vite. Data fetching via TanStack Query, using Hono's typed `hc` client for end-to-end types without codegen. UI from shadcn/ui (Radix + Tailwind). Vite proxies `/api` in dev.
+- **shared** — Zod schemas you write by hand here (nothing is generated): one per request/response shape, imported by both apps. TypeScript types come from them via `z.infer`; the web app's API types are inferred from the api code through `hc`.
+
+| Area          | Technologies                                                                       |
+| ------------- | ---------------------------------------------------------------------------------- |
+| Web           | React, Vite, TanStack Query, shadcn/ui, Tailwind CSS, lucide                       |
+| API           | Hono, @hono/zod-openapi, Zod, Scalar                                               |
+| Testing (web) | Vitest, Testing Library, jsdom (browser DOM in Node), MSW (mocks `/api` responses) |
+| Testing (api) | Vitest, Hono `app.request()` (calls routes without a server)                       |
+| Tooling       | pnpm workspaces, TypeScript 7, oxlint (type-aware), oxfmt                          |
+
 | Task             | Command                                                                   |
 | ---------------- | ------------------------------------------------------------------------- |
 | Dev (watch both) | `pnpm dev` — API on :3000, web on :5173                                   |
