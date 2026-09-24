@@ -4,6 +4,13 @@ pnpm monorepo: React + Vite + TanStack Query + shadcn/ui (`apps/web`), Hono (`ap
 
 Requires Node 26 and pnpm 12. Install with `pnpm install`.
 
+## Using this template
+
+Create a project with **Use this template** on GitHub, or `gh repo create my-app --template OscBacon/typescript-starter --private --clone`. Then rename:
+
+- Package scope: `git grep -l '@starter/' | xargs sed -i 's#@starter/#@my-app/#g' && pnpm install`
+- Root `name` in `package.json`, the `<title>` in `apps/web/index.html`, the header text in `apps/web/src/components/site-header.tsx`, and the OpenAPI title in `apps/api/src/app.ts`
+
 ## Architecture
 
 - **api** — Hono on Node (runs `.ts` directly), routes defined with `@hono/zod-openapi`, which validates requests, infers types, and generates the OpenAPI spec; Scalar serves the docs.
