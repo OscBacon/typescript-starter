@@ -21,10 +21,19 @@ describe('App', () => {
     expect(await screen.findByText('Hello from MSW')).toBeInTheDocument();
   });
 
-  it('shows an error when the API fails', async () => {
+  it('shows the status when the API returns an error', async () => {
     server.use(http.get('*/api/hello', () => new HttpResponse(null, { status: 500 })));
     renderApp();
 
-    expect(await screen.findByText('Could not reach the API.')).toBeInTheDocument();
+    expect(await screen.findByText('API request failed with status 500.')).toBeInTheDocument();
+  });
+
+  it('says the API is unreachable when the request fails', async () => {
+    server.use(http.get('*/api/hello', () => HttpResponse.error()));
+    renderApp();
+
+    expect(
+      await screen.findByText(/Could not reach the API at .*\. Is it running\?/),
+    ).toBeInTheDocument();
   });
 });

@@ -1,6 +1,8 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 import { Scalar } from '@scalar/hono-api-reference';
 import { HelloSchema } from '@starter/shared';
+import { env } from 'hono/adapter';
+import { cors } from 'hono/cors';
 
 const helloRoute = createRoute({
   method: 'get',
@@ -14,6 +16,17 @@ const helloRoute = createRoute({
 });
 
 export const app = new OpenAPIHono();
+
+// The web app may be served from another domain. WEB_ORIGIN is a comma-separated allowlist.
+app.use(
+  '/api/*',
+  cors({
+    origin: (origin, c) => {
+      const { WEB_ORIGIN = 'http://localhost:5173' } = env<{ WEB_ORIGIN?: string }>(c);
+      return WEB_ORIGIN.split(',').includes(origin) ? origin : null;
+    },
+  }),
+);
 
 // Chain routes so AppType carries every route's types for the hc client.
 const routes = app.openapi(helloRoute, (c) => c.json({ message: 'Hello from the API' }, 200));

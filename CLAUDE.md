@@ -7,7 +7,8 @@
 ## Dev servers
 
 - The user usually has `pnpm dev` running. Never `pkill -f` dev processes. For live checks use other ports
-  (`PORT=3100`, `vite --port 5273 --strictPort`) and stop only the PIDs you started.
+  (`PORT=3100 WEB_ORIGIN=http://localhost:5273`, `VITE_API_URL=http://localhost:3100 vite --port 5273 --strictPort`)
+  and stop only the PIDs you started.
 
 ## TypeScript 7
 

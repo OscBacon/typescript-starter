@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { helloOptions } from './api.ts';
 
 export function App() {
-  const { data, isPending, isError } = useQuery(helloOptions());
+  const { data, isPending, error } = useQuery(helloOptions());
 
   return (
     <div className="min-h-svh bg-background">
@@ -20,11 +20,11 @@ export function App() {
           </CardHeader>
           <CardContent>
             {isPending && <Skeleton className="h-5 w-40" />}
-            {isError && (
+            {error && (
               <Alert variant="destructive">
                 <CircleAlert />
-                <AlertTitle>Could not reach the API.</AlertTitle>
-                <AlertDescription>Is `pnpm dev` running?</AlertDescription>
+                <AlertTitle>API error</AlertTitle>
+                <AlertDescription>{error.message}</AlertDescription>
               </Alert>
             )}
             {data && <p className="text-sm">{data.message}</p>}

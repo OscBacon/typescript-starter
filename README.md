@@ -14,7 +14,7 @@ Create a project with **Use this template** on GitHub, or `gh repo create my-app
 ## Architecture
 
 - **api** — Hono on Node (runs `.ts` directly), routes defined with `@hono/zod-openapi`, which validates requests, infers types, and generates the OpenAPI spec; Scalar serves the docs.
-- **web** — React SPA built with Vite. Data fetching via TanStack Query, using Hono's typed `hc` client for end-to-end types without codegen. UI from shadcn/ui (Radix + Tailwind). Vite proxies `/api` in dev.
+- **web** — React SPA built with Vite. Data fetching via TanStack Query, using Hono's typed `hc` client for end-to-end types without codegen. UI from shadcn/ui (Radix + Tailwind).
 - **shared** — Zod schemas you write by hand here (nothing is generated): one per request/response shape, imported by both apps. TypeScript types come from them via `z.infer`; the web app's API types are inferred from the api code through `hc`.
 
 | Area          | Technologies                                                                                                                                                                             |
@@ -36,5 +36,7 @@ Create a project with **Use this template** on GitHub, or `gh repo create my-app
 | Check            | `pnpm typecheck && pnpm lint && pnpm format:check`                        |
 
 API docs: http://localhost:3000/docs · Adding an endpoint: [docs/adding-an-endpoint.md](docs/adding-an-endpoint.md)
+
+The web app calls the API at `VITE_API_URL` (default `http://localhost:3000`; set it for production builds). The API allows origins in `WEB_ORIGIN` (default `http://localhost:5173`). See each app's `.env.example`.
 
 Add a UI component: `cd apps/web && pnpm dlx shadcn@latest add <name>`
