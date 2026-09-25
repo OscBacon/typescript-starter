@@ -17,12 +17,15 @@ const helloRoute = createRoute({
 
 export const app = new OpenAPIHono();
 
-// The web app may be served from another domain. WEB_ORIGIN is a comma-separated allowlist.
+// localhost and *.localhost (portless) in development; WEB_ORIGIN, a comma-separated allowlist, always.
+const LOCAL_ORIGIN = /^https?:\/\/(?:[a-z0-9-]+\.)*localhost(?::\d+)?$/;
+
 app.use(
   '/api/*',
   cors({
     origin: (origin, c) => {
-      const { WEB_ORIGIN = 'http://localhost:5173' } = env<{ WEB_ORIGIN?: string }>(c);
+      const { NODE_ENV, WEB_ORIGIN = '' } = env<{ NODE_ENV?: string; WEB_ORIGIN?: string }>(c);
+      if (NODE_ENV !== 'production' && LOCAL_ORIGIN.test(origin)) return origin;
       return WEB_ORIGIN.split(',').includes(origin) ? origin : null;
     },
   }),

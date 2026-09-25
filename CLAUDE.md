@@ -6,8 +6,9 @@
 
 ## Dev servers
 
-- The user usually has `pnpm dev` running. Never `pkill -f` dev processes. For live checks use other ports
-  (`PORT=3100 WEB_ORIGIN=http://localhost:5273`, `VITE_API_URL=http://localhost:3100 vite --port 5273 --strictPort`)
+- The user usually has `pnpm dev` running (through portless). Never `pkill -f` dev processes, and never
+  `portless --force`: it kills the user's server holding that name. For live checks bypass portless on other
+  ports (`PORT=3100 node src/server.ts`, `VITE_API_URL=http://localhost:3100 vite --port 5273 --strictPort`)
   and stop only the PIDs you started.
 
 ## TypeScript 7
